@@ -1,2 +1,8 @@
+#dependencies
 /node_modules
-/.env
+
+#production
+/build
+
+#env file
+.env

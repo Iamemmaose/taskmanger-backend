@@ -1,53 +1,27 @@
-import express from "express"
-import task from "./routes/route.js"
+import "dotenv/config";
+import express from "express";
+import task from "./routes/route.js";
+import { connectDB } from "./db/connect.js";
+
 const app = express();
 
-//middleware
-app.use(express.json())
+app.use(express.json());
 
 const port = 5000;
 
-//create a route
-app.get("/", (req, res) => {
-    res.json({
-        message: "welcome to Api",
-        tasks: {
-            name: "Emma",
-            id: 1,
-            complete: true
-        }
-    })
-})
+app.use("/api/v1/tasks", task);
 
-app.post("/", (req, res) => {
-    console.log(req.body)
-
-    res.json({
-        message: "user has been created",
-        user: req.body
-    })
-})
-
-app.get("/api/tasks/:id", (req, res) => {
-    console.log(req.params)
-
-    res.json({
-        message: "task Id recieved",
-        id: req.params.id
-    })
-})
-
-app.get("/api/search", (req, res) => {
-    console.log(req.query)
-
-    res.json({
-        search: req.query
-    })
-})
+const start = async () => {
+    try {
+        await connectDB(process.env.MONGO_URI);
+        app.listen(port, () => {
+            console.log(`Your server is running on port ${port}..`);
+        });
+    } catch (err) {
+        console.log(err);
+    }
+};
 
 
-app.use("/api/tasks", task)
 
-app.listen(port, () => {
-    console.log(`your server is running on port ${port}.. `)
-})
+start();
