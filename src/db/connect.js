@@ -1,6 +1,5 @@
 import mongoose from "mongoose"
 
-
-export const connectDB = (url) => {
-   return  mongoose.connect(url);
+export const ConnectDB = (url) => {
+    return mongoose.connect(url)
 }

@@ -1,8 +1,17 @@
 import mongoose from "mongoose"
+import { maxLength } from "zod"
 
-const TaskSchema = new mongoose.Schema ({
-    task: String,
-    completed: Boolean
+const TaskSchema = new mongoose.Schema({
+    task: {
+      type: String,
+      required: [true, "name must be provided"],
+      trim: true,
+      maxLength: [20, "must not be more than 20 characters"]
+    },
+    completed: {
+        type: Boolean,
+        default: false
+    }
 })
 
-export const Task = mongoose.model("Task", TaskSchema);
+export const Task = mongoose.model("Task", TaskSchema)
