@@ -1,51 +1,45 @@
 import { Task } from "../models/task.js"
+import { asyncWrapper } from "../middleware/async.js"
+import { customErrorMsg } from "../error/customError.js"
 
+export const getAllTask = asyncWrapper(async (req, res) => {
+    const task = await Task.find({})
+    res.status(200).json({ task })
+})
 
-export const getAllTask = async (req, res) => {
-    try {
-        const task = await Task.find({})
-        res.status(200).json({ task })
-    } catch (error) {
-        res.status(500).json({ msg: error })
+export const createTask = asyncWrapper(async (req, res) => {
+    const task = await Task.create(req.body)
+    res.status(201).json({ task })
+
+})
+
+export const getTask = asyncWrapper(async (req, res) => {
+    const { id: taskID } = req.params
+    const task = await Task.findOne({ _id: taskID })
+    res.status(200).json({ task })
+    if (!task) {
+        return customErrorMsg(`No task with ID ${taskID}`, 404)
     }
-}
+})
 
-export const createTask = async (req, res) => {
-    try {
-        const task = await Task.create(req.body)
-        res.status(201).json({ task })
-    } catch (error) {
-        res.status(500).json({ msg: error })
+export const updateTask = asyncWrapper(async (req, res) => {
+    const { id: taskID } = req.params
+    const task = await Task.findOneAndUpdate({ _id: taskID}, req.body, {
+        returnDocument: "after",
+        runValidators: true
+    })
+    res.status(200).json({ task })
+    if (!task) {
+        return customErrorMsg(`No task with ID ${taskID}`, 404)
     }
-}
+})
 
-export const getTask = async (req, res) => {
-    try {
-        const task = await Task.findOne({ _id: req.params.id })
-        res.status(200).json({ task })
-    } catch (error) {
-        res.status(500).json({ msg: error })
+
+export const deleteTask = asyncWrapper(async (req, res) => {
+    const { id: taskID } = req.params
+    const task = await Task.findOneAndDelete({ _id: taskID })
+    res.status(200).json({ task })
+    if (!task) {
+        return customErrorMsg(`No task with ID ${taskID}`, 404)
     }
-}
-
-export const updateTask = async (req, res) => {
-    try {
-        const task = await Task.findOneAndUpdate({ _id: req.params.id }, req.body, {
-            returnDocument: "after",
-            runValidators: true
-        })
-        res.status(200).json({ task })
-    } catch (error) {
-        res.status(500).json({ msg: error })
-    }
-}
-
-
-export const deleteTask = async (req, res) => {
-    try {
-        const task = await Task.findOneAndDelete({ _id: req.params.id })
-        res.status(200).json({ task })
-    } catch (error) {
-        res.status(500).json({ msg: error })
-    }
-}
+})

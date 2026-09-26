@@ -4,18 +4,25 @@ import { ConnectDB } from "./db/connect.js";
 import dotenv from "dotenv"
 import path from "path"
 import { fileURLToPath } from "url";
-import cors from "cors"
+import cors from "cors";
+import { notFound} from "./middleware/notFound.js"
+import { errorHandler} from "./middleware/errorHandler.js"
 
 const app = express();
 
 app.use(express.json());
+
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: `http://localhost:3000`
 }))
 
 const port = 5000;
 
 app.use("/api/v1/tasks", task);
+app.use(notFound)
+app.use(errorHandler)
+
+
 
 const _filename = fileURLToPath(import.meta.url);
 const _dirname = path.dirname(_filename)
