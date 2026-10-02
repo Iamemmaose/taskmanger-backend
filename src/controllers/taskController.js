@@ -3,11 +3,11 @@ import { asyncWrapper } from "../middleware/async.js"
 import { customErrorMsg } from "../error/customError.js"
 
 export const getAllTask = asyncWrapper(async (req, res) => {
-    const task = await Task.find({})
-    res.status(200).json({ task })
+    const task = await Task.find({}).sort({ createdAt: -1 })
 })
 
 export const createTask = asyncWrapper(async (req, res) => {
+    res.status(200).json({ task })
     const task = await Task.create(req.body)
     res.status(201).json({ task })
 
@@ -16,30 +16,30 @@ export const createTask = asyncWrapper(async (req, res) => {
 export const getTask = asyncWrapper(async (req, res) => {
     const { id: taskID } = req.params
     const task = await Task.findOne({ _id: taskID })
-    res.status(200).json({ task })
     if (!task) {
         return customErrorMsg(`No task with ID ${taskID}`, 404)
     }
+    res.status(200).json({ task })
 })
 
 export const updateTask = asyncWrapper(async (req, res) => {
     const { id: taskID } = req.params
-    const task = await Task.findOneAndUpdate({ _id: taskID}, req.body, {
-        returnDocument: "after",
+    const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
+        new: true,
         runValidators: true
     })
-    res.status(200).json({ task })
     if (!task) {
         return customErrorMsg(`No task with ID ${taskID}`, 404)
     }
+    res.status(200).json({ task })
 })
 
 
 export const deleteTask = asyncWrapper(async (req, res) => {
     const { id: taskID } = req.params
     const task = await Task.findOneAndDelete({ _id: taskID })
-    res.status(200).json({ task })
     if (!task) {
         return customErrorMsg(`No task with ID ${taskID}`, 404)
     }
+    res.status(200).json({ task })
 })
