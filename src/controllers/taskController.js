@@ -4,13 +4,12 @@ import { customErrorMsg } from "../error/customError.js"
 
 export const getAllTask = asyncWrapper(async (req, res) => {
     const task = await Task.find({}).sort({ createdAt: -1 })
+    res.status(200).json({ task })
 })
 
 export const createTask = asyncWrapper(async (req, res) => {
-    res.status(200).json({ task })
     const task = await Task.create(req.body)
     res.status(201).json({ task })
-
 })
 
 export const getTask = asyncWrapper(async (req, res) => {
