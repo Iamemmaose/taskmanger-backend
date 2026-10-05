@@ -98,12 +98,6 @@ This API was developed as the backend service for a separate Task Manager fronte
 
 The frontend communicates with this API through HTTP requests to perform task management operations.
 
-## Deployment
-
-The API can be deployed using backend hosting platforms such as Render, Railway, or similar services.
-
-**Live API:** Add your deployed API URL here.
-
 ## Project Purpose
 
 This project was built to strengthen practical backend development skills, including REST API development, Express.js, MongoDB integration, CRUD operations, request validation, error handling, and frontend-backend communication.
